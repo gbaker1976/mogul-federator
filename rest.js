@@ -24,8 +24,8 @@ server.use( restify.CORS({
 		'https://127.0.0.1'
 	],
     credentials: true,
-    headers: [ 
-    	'x-foo' 
+    headers: [
+    	'x-foo'
     ]
 }));
 

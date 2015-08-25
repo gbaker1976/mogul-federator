@@ -1,8 +1,6 @@
 {
 	"routers": [
 		{ "name": "accounts" },
-		{ "name": "sites" },
-		{ "name": "elements" },
-		{ "name": "publish" }
+		{ "name": "sites" }
 	]
 }

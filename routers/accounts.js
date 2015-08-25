@@ -1,15 +1,18 @@
 var couchbase = require( 'couchbase' );
 var uuid = require( 'node-uuid' );
 var _ = require( 'underscore' );
-var db = new couchbase.Connection({ host: 'localhost:8091', bucket: 'default' });
+var cluster = new couchbase.Cluster( '127.0.0.1:8091' ); // mock mode
+var bucket = cluster.openBucket( 'default' ); // mock mode
 
 module.exports = {
 	register: function( app ){
 
 		// CRUD accounts collection
 		app.get( '/accounts', function (req, res, next) {
-			var query = db.view( 'accounts', 'all_accounts' );
-			query.query( function(err, result) {
+
+			var query = couchbase.ViewQuery.from( 'accounts', 'all_accounts' );
+
+			bucket.query( query, function(err, result) {
         		if (err) {
         			res.send( 500, err );
         			return;
@@ -26,9 +29,9 @@ module.exports = {
 		});
 
 		app.post( '/accounts', function (req, res, next) {
-			var account = _.extend( 
-				{}, 
-				req.body, 
+			var account = _.extend(
+				{},
+				req.body,
 				{
 					account_id: uuid.v1(),
 					type: 'account'
@@ -40,19 +43,19 @@ module.exports = {
 				return;
 			}
 
-			db.set( account.account_id, account, function( err, result ){
+			bucket.insert( account.account_id, account, function( err, result ){
 				if (err) {
         			res.send( 500, err );
         			return;
         		}
 
-        		db.get( account.account_id, function( err, result ){
+        		bucket.get( account.account_id, function( err, result ){
         			if (err) {
 	        			res.send( 500, err );
 	        			return;
 	        		}
 
-	        		res.send( 201, result[0] );
+	        		res.send( 201, result );
        				return next();
         		});
 			});
@@ -60,8 +63,10 @@ module.exports = {
 
 		// CRUD accounts resource
 		app.get( '/accounts/:id', function (req, res, next) {
-			var query = db.view( 'accounts', 'by_accountid' );
-			query.query( { key: req.params.id }, function(err, result) {
+
+			var query = couchbase.ViewQuery.from( 'accounts', 'by_accountid' );
+
+			bucket.query( { key: req.params.id }, function(err, result) {
         		if (err) {
         			res.send( 500, err );
         			return;
@@ -117,5 +122,5 @@ module.exports = {
 			});
 		});
 
-	}	
+	}
 };
