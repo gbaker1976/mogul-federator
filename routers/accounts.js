@@ -64,9 +64,9 @@ module.exports = {
 		// CRUD accounts resource
 		app.get( '/accounts/:id', function (req, res, next) {
 
-			var query = couchbase.ViewQuery.from( 'accounts', 'by_accountid' );
+			var query = couchbase.ViewQuery.from( 'accounts', 'by_accountid' ).custom( { key: req.params.id } );
 
-			bucket.query( { key: req.params.id }, function(err, result) {
+			bucket.query( query, function(err, result) {
         		if (err) {
         			res.send( 500, err );
         			return;
@@ -90,6 +90,7 @@ module.exports = {
 				return;
 			}
 
+			// prevent loss of account_id
 			accountId = req.body.account_id = req.params.id;
 
 			db.set( accountId, req.body, function( err, result ){
