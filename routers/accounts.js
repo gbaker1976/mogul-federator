@@ -55,7 +55,7 @@ module.exports = {
 	        			return;
 	        		}
 
-	        		res.send( 201, result );
+	        		res.send( 201, result.value );
        				return next();
         		});
 			});
@@ -64,22 +64,15 @@ module.exports = {
 		// CRUD accounts resource
 		app.get( '/accounts/:id', function (req, res, next) {
 
-			var query = couchbase.ViewQuery.from( 'accounts', 'by_accountid' ).custom( { key: req.params.id } );
+			bucket.get( req.params.id, function(err, result) {
+	  		if (err) {
+	  			res.send( 404, err );
+	  			return;
+	  		}
 
-			bucket.query( query, function(err, result) {
-        		if (err) {
-        			res.send( 500, err );
-        			return;
-        		}
-
-        		if ( !result || !result.length ) {
-        			res.send( 404 );
-        			return;
-        		}
-
-        		res.send( result[0] );
-       			return next();
-      		});
+	  		res.send( result.value );
+	 			return next();
+			});
 		});
 
 		app.put( '/accounts/:id', function (req, res, next) {
@@ -93,7 +86,7 @@ module.exports = {
 			// prevent loss of account_id
 			accountId = req.body.account_id = req.params.id;
 
-			db.set( accountId, req.body, function( err, result ){
+			bucket.set( accountId, req.body, function( err, result ){
 				if (err) {
         			res.send( 500, err );
         			return;
@@ -112,14 +105,14 @@ module.exports = {
 		});
 
 		app.del( '/accounts/:id', function (req, res, next) {
-			db.remove( req.params.id, function( err, result ){
-		  		if (err) {
-        			res.send( 500, err );
-        			return;
-        		}
+			bucket.remove( req.params.id, function( err, result ){
+	  		if (err) {
+	    			res.send( 500, err );
+	    			return;
+	    		}
 
-        		res.send( 200, result );
-       			return next();
+	    		res.send( 200, result );
+	   			return next();
 			});
 		});
 
