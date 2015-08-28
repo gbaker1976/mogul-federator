@@ -5,37 +5,37 @@ module.exports = {
 
 		// CRUD accounts collection
 		app.get( '/accounts', function (req, res, next) {
-			service.getAll(function( result ){
-				res.send( result.code, result.payload );
+			service.getAll(function( code, result ){
+				res.send( code, result );
 				next();
 			});
 		});
 
 		app.post( '/accounts', function (req, res, next) {
-			service.add( req.body, function( result ){
-				res.send( result.code, result.payload );
+			service.add( req.body, function( code, result ){
+				res.send( code, result );
 				next();
 			});
 		});
 
 		// CRUD accounts resource
 		app.get( '/accounts/:id', function (req, res, next) {
-			service.getById( req.params.id, function( result ){
-				res.send( result.code, result.payload );
+			service.getById( req.params.id, function( code, result ){
+				res.send( code, result );
 				next();
 			});
 		});
 
 		app.put( '/accounts/:id', function (req, res, next) {
-			service.updateById( req.params.id, req.body, function( result ){
-				res.send( result.code, result.payload );
+			service.updateById( req.params.id, req.body, function( code, result ){
+				res.send( code, result );
 				next();
 			});
 		});
 
 		app.del( '/accounts/:id', function (req, res, next) {
-			service.deleteById( req.params.id, function( result ){
-				res.send( result.code, result.payload );
+			service.deleteById( req.params.id, function( code, result ){
+				res.send( code, result );
 				next();
 			});
 		});

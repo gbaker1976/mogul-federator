@@ -1,6 +1,7 @@
 var restify = require( 'restify' );
 var router = require( './services' );
 var gatekeeper = require( './lib/gatekeeper' );
+var routerConfig = require( './routers.json' );
 
 var server = restify.createServer({
   name: 'Mogul',
@@ -34,7 +35,7 @@ server.use( gatekeeper );
 server.use( restify.acceptParser( server.acceptable ) );
 server.use( restify.queryParser() );
 server.use( restify.bodyParser() );
-server.use( router( server ) );
+server.use( router( server, routerConfig ) );
 server.use( restify.gzipResponse() );
 
 server.listen( 10000, function () {

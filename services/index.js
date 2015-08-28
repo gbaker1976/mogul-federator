@@ -1,12 +1,10 @@
-var routerFile = require( './routers.json' );
-
-module.exports = function( server ){
+module.exports = function( server, routerConfig ){
 	var i = 0;
-	var l = routerFile.routers.length;
+	var l = routerConfig.routers.length;
 	var router = null;
 
 	for(; i < l; i++ ){
-		router = require( './' + routerFile.routers[ i ].name );
+		router = require( './' + routerConfig.routers[ i ].name );
 		if ( router ) {
 			router.register( server );
 		}

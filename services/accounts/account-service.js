@@ -11,14 +11,14 @@ Module.prototype.getAll = function( callback ){
 
   bucket.query( query, function(err, result) {
     if (err) {
-      callback( { code: 500, payload: err } );
+      callback( 500, err );
     }
 
     if ( !result || !result.length ) {
-      callback( { code: 204 } );
+      callback( 204 );
     }
 
-    callback( { code: 200, payload: result } );
+    callback( 200, result );
   });
 };
 
@@ -33,26 +33,20 @@ Module.prototype.add = function( obj, callback ){
   );
 
   if ( !account.username || !account.password ) {
-    callback({
-      code: 409,
-      payload: 'Username and password must be supplied'
-    });
+    callback( 409, 'Username and password must be supplied' );
   }
 
   bucket.insert( account.account_id, account, function( err, result ){
     if (err) {
-      callback( { code: 500, payload: err} );
+      callback( 500, err );
     }
 
     bucket.get( account.account_id, function( err, result ){
       if (err) {
-        callback( { code: 500, payload: err} );
+        callback( 500, err );
       }
 
-      callback({
-        code: 201,
-        payload: result.value
-      });
+      callback( 201, result.value );
     });
   });
 };
@@ -60,10 +54,10 @@ Module.prototype.add = function( obj, callback ){
 Module.prototype.getById = function( id, callback ){
   bucket.get( id, function(err, result) {
     if (err) {
-      callback( { code: 404, payload: err } );
+      callback( 404, err );
     }
 
-    callback( { code: 200, payload: result.value } );
+    callback( 200, result.value );
   });
 };
 
@@ -71,7 +65,7 @@ Module.prototype.updateById = function( id, props, callback ){
   var accountId = null;
 
   if ( !props || !props.username || !props.password ) {
-    callback( { code: 409, payload: 'Username and password must be supplied' } );
+    callback( 409, 'Username and password must be supplied' );
   }
 
   // prevent loss of account_id
@@ -79,15 +73,15 @@ Module.prototype.updateById = function( id, props, callback ){
 
   bucket.set( accountId, props, function( err, result ){
     if (err) {
-      callback( { code: 500, payload: err } );
+      callback( 500, err );
     }
 
     bucket.get( accountId, function( err, result ){
       if (err) {
-        callback( { code: 500, payload: err } );
+        callback( 500, err );
       }
 
-      callback( { code: 200, payload: result } );
+      callback( 200, result );
     });
   });
 };
@@ -95,10 +89,10 @@ Module.prototype.updateById = function( id, props, callback ){
 Module.prototype.deleteById = function( id ){
   bucket.remove( id, function( err, result ){
     if (err) {
-        callback( { code: 500, payload: err } );
+        callback( 500, err );
       }
 
-      callback( { code: 200, payload: result } );
+      callback( 200, result );
   });
 };
 
