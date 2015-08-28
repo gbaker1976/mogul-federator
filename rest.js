@@ -31,10 +31,9 @@ server.use( restify.CORS({
     ]
 }));
 
-federator( server );
-
 server.use( restify.authorizationParser() );
 server.use( gatekeeper );
+server.use( federator( server ).federate );
 server.use( restify.acceptParser( server.acceptable ) );
 server.use( restify.queryParser() );
 server.use( restify.bodyParser() );
