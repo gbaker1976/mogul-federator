@@ -1,6 +1,7 @@
 var restify = require( 'restify' );
 var router = require( './services' );
 var gatekeeper = require( './lib/gatekeeper' );
+var federator = require( './lib/federator' );
 var routerConfig = require( './routers.json' );
 
 var server = restify.createServer({
@@ -29,6 +30,8 @@ server.use( restify.CORS({
     	'x-mogul-csrf'
     ]
 }));
+
+federator( server );
 
 server.use( restify.authorizationParser() );
 server.use( gatekeeper );
