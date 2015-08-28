@@ -1,0 +1,24 @@
+GATEKEEPER
+
+- Implement actual user principal retrieval validation/authentication
+  Given credentials presented by client:
+
+  Bearer token (authentication):
+    - Validate token.
+    - Resolve token to active principal in datastore.
+    - Attach principal to session for later use by middleware.
+
+  CSRF token (non-repudiation):
+    - Validate CSRF token against last known CSRF of principal.
+    - Generate new CSRF token.
+    - Attach new CSRF token to response headers.
+
+- Implement per-principal rate limiting.
+
+
+FEDERATED SERVICES FRAMEWORK (ROUTERS)
+
+- Implement framework for dynamic service registration.
+  - Framework should not require services to be configured before startup.
+    Instead, services should be able to register one or more endpoints after
+    federator startup.

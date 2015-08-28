@@ -1,9 +1,9 @@
 var restify = require( 'restify' );
-var router = require( './routers/index' );
+var router = require( './services' );
 var gatekeeper = require( './lib/gatekeeper' );
 
 var server = restify.createServer({
-  name: 'mogul',
+  name: 'Mogul',
   version: '1.0.0'
 });
 
@@ -25,15 +25,17 @@ server.use( restify.CORS({
 	],
     credentials: true,
     headers: [
-    	'x-foo'
+    	'x-mogul-csrf'
     ]
 }));
 
-server.use( restify.acceptParser( server.acceptable ) );
 server.use( restify.authorizationParser() );
-
-gatekeeper.initialize( restify, server );
-router.register( gatekeeper );
+server.use( gatekeeper );
+server.use( restify.acceptParser( server.acceptable ) );
+server.use( restify.queryParser() );
+server.use( restify.bodyParser() );
+server.use( router( server ) );
+server.use( restify.gzipResponse() );
 
 server.listen( 10000, function () {
   console.log( '%s listening at %s', server.name, server.url );
