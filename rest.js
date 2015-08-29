@@ -30,12 +30,15 @@ server.use( restify.CORS({
 }));
 
 server.use( restify.authorizationParser() );
+server.use( restify.acceptParser( server.acceptable ) );
 server.use( gatekeeper );
 server.use( federator( server ).federate );
-server.use( restify.acceptParser( server.acceptable ) );
-server.use( restify.queryParser() );
-server.use( restify.bodyParser() );
 server.use( restify.gzipResponse() );
+
+server.get( '.*', function(){} );
+server.put( '.*', function(){} );
+server.post( '.*', function(){} );
+server.del( '.*', function(){} );
 
 server.listen( 10000, function () {
   console.log( '%s listening at %s', server.name, server.url );

@@ -17,6 +17,7 @@
     "gulp-aglio": "0.0.6"
   },
   "dependencies": {
+    "http-proxy": "^1.11.1",
     "logfmt": "1.1.2",
     "restify": "2.8.1"
   }
