@@ -1,6 +1,0 @@
-{
-	"routers": [
-		{ "name": "accounts" },
-		{ "name": "sites" }
-	]
-}
