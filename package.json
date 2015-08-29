@@ -8,13 +8,14 @@
   "description": "Mogul API v1 (Doc)",
   "main": "rest.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/nodeunit/bin/nodeunit tests/index.js"
   },
   "author": "Garrett Baker",
   "license": "Proprietary",
   "devDependencies": {
     "gulp": "3.8.11",
-    "gulp-aglio": "0.0.6"
+    "gulp-aglio": "0.0.6",
+    "nodeunit": "^0.9.1"
   },
   "dependencies": {
     "http-proxy": "^1.11.1",
