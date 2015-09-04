@@ -29,7 +29,9 @@ server.use( restify.CORS({
     ]
 }));
 
-federator( server );
+if ( !federator( server ) ) {
+  return;
+}
 
 server.use( restify.authorizationParser() );
 server.use( restify.acceptParser( server.acceptable ) );
