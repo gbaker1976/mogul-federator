@@ -23,18 +23,9 @@ FEDERATED SERVICES FRAMEWORK
     Instead, services should be able to register one or more endpoints after
     federator startup.
 
-- IP whitelisting module for registering API nodes.
-  - The whitelist should provide a means to validate allowed API nodes on
-    initial registration connection.
-
 - API node registration request & client service request tracking via UUID
   - Generate UUID for every request.
   - When logging request events, provide UUID to aid in monitoring and
     troubleshooting.
   - Pass UUID to proxied API nodes via HTTP header to allow federator-node
     logging.
-
-
-WHITELIST (APPROVED API NODE REGISTRATION CONTROL)
-
-  - Whitelist should be shared across all federator nodes.
