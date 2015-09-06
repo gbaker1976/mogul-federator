@@ -1,7 +1,7 @@
 var restify = require( 'restify' );
 var gatekeeper = require( './lib/gatekeeper' );
 var config = require( 'config' );
-var federator = require( './lib/federator' )( config );
+var federator = require( './lib/federator' );
 
 var server = restify.createServer({
   name: 'Mogul',
@@ -31,14 +31,11 @@ server.use( restify.CORS({
 }));
 
 if ( true === config.allowRegistration ) {
-  if ( federator.initRegistrationServer( server ) ) {
-    console.log( "Federator API node registration enabled. Listening for API node registration." );
-  } else {
-    console.log( "Federator API node registration enabled, but, API node registration server failed to start." );
-    return;
+  if ( federator( config, server ) ) {
+    console.log( "Federator API node registration enabled. Subscribing to API node registration queue." );
   }
 } else {
-  console.log( "Federator API node registration disabled. Starting in API service proxy mode only." );
+  console.log( "Federator API node registration disabled." );
 }
 
 server.use( restify.authorizationParser() );

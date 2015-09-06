@@ -21,6 +21,7 @@
     "config": "^1.16.0",
     "http-proxy": "^1.11.1",
     "logfmt": "1.1.2",
+    "rax-api": "file:../rax-api",
     "restify": "2.8.1"
   }
 }
