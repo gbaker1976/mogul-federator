@@ -11,7 +11,7 @@ process.on( 'message', function( m ) {
       return function(){
         raxQ.getMessages( queue, function( err, messages ){
           if ( err ) {
-            console.error( "Error from rackspace API: \n%s", err );
+            console.error( "Error from rackspace API:\n%s", err );
             return;
           }
 
