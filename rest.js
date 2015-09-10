@@ -43,6 +43,6 @@ server.use( restify.acceptParser( server.acceptable ) );
 server.use( gatekeeper );
 server.use( restify.gzipResponse() );
 
-server.listen( 10000, function () {
+server.listen( config.port, function () {
   console.log( '%s listening at %s', server.name, server.url );
 });

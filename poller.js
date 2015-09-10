@@ -1,24 +1,32 @@
 var rax = require( 'rax-api' );
+var pollInterval = 10000;
+var timeoutId;
 
 process.on( 'message', function( m ) {
-  var raxQ = rax( m.config ).queues;
-  var pollFunc = function(){
-    raxQ.getMessages( m.queue, function( err, messages ){
-      if ( err ) {
-        console.log( err );
-        return;
-      }
-
-      process.send({
-        type: 'message',
-        messages: messages
-      });
-
-      setTimeout( pollFunc, 1000 );
-    });
-  };
+  var pollFunc;
 
   if ( 'rax' === m.type && m.queue && m.config ) {
-    setTimeout( pollFunc, 1000 );
+
+    pollFunc = (function( raxQ, queue ){
+      return function(){
+        raxQ.getMessages( queue, function( err, messages ){
+          if ( err ) {
+            console.error( "Error from rackspace API: \n%s", err );
+            return;
+          }
+
+          process.send({
+            type: 'message',
+            messages: messages
+          });
+
+          clearTimeout( timeoutId );
+          timeoutId = setTimeout( pollFunc, pollInterval );
+        });
+      }
+    })( rax( m.config ).queues, m.queue );
+
+    clearTimeout( timeoutId );
+    timeoutId = setTimeout( pollFunc, pollInterval );
   }
 });
